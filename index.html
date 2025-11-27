@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Portofolio — farhannd</title>
+
+<style>
+  /* ================== THEME (Soft Cyan -> Blue) ================== */
+  :root{
+    --bg-1: #365a83;
+    --bg-2: #365a83;
+    --accent-1: #407bb3; /* cyan */
+    --accent-2: #6388b9; /* blue */
+    --muted: #000000;
+    --card: #ffffff;
+    --glass: rgba(255,255,255,0.6);
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --shadow-soft: 0 10px 30px rgba(23, 38, 49, 0.08);
+    --shadow-strong: 0 20px 50px rgba(34,60,80,0.12);
+    --maxw: 1150px;
+    --ease: cubic-bezier(.2,.9,.2,1);
+  }
+
+  /* ========== RESET ========== */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(120deg,var(--bg-1),var(--bg-2));
+    color:#0b1724;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.5;
+  }
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:28px}
+
+  /* ================== NAVBAR ================== */
+  header.navbar{
+    position:sticky;top:18px;z-index:80;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 18px;border-radius:14px;
+    background: linear-gradient(180deg, rgba(47, 107, 185, 0.9), rgba(255, 255, 255, 0.85));
+    box-shadow: var(--shadow-soft);
+    margin:8px 20px;
+  }
+  .brand{font-weight:800;color:var(--accent-2);letter-spacing:0.3px}
+  nav.links{display:flex;gap:12px;align-items:center}
+  nav.links a{
+    color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:700;transition:all .22s var(--ease);
+  }
+  nav.links a:hover{ color:var(--accent-2); transform:translateY(-3px) }
+  nav.links a.active{ color:var(--accent-2); background:rgba(102,166,255,0.08) }
+
+  .cta{padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#022;font-weight:800;box-shadow:0 8px 24px rgba(102,166,255,0.12)}
+
+  /* ================== HERO (COVER) ================== */
+  .hero{
+    margin:28px 20px;
+    display:grid;
+    grid-template-columns:1fr 360px;
+    gap:26px;
+    align-items:center;
+    padding:40px;
+    border-radius:26px;
+    background:linear-gradient(180deg, rgba(47, 107, 185, 0.9), rgba(255,255,255,0.9));
+    box-shadow:var(--shadow-strong);
+  }
+  .hero h1{font-size:2.25rem;margin-bottom:8px}
+  .subtitle{color:var(--muted);margin-bottom:14px}
+
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+
+  /* stylized card right */
+  .card-profile{
+    border-radius:18px;padding:18px;background:linear-gradient(180deg,rgba(255, 255, 255, 0.9),#f8fdff);
+    box-shadow:var(--shadow-soft);display:flex;flex-direction:column;gap:10px;align-items:center;
+  }
+  .profile-photo{width:160px;height:160px;border-radius:18px;overflow:hidden;border:6px solid rgba(107, 153, 212, 0.9);box-shadow:0 12px 30px rgba(102,166,255,0.06);}
+  .profile-photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* ================== ABOUT (with bubble canvas inside this section only) ================== */
+  .about{
+    margin:28px 20px;
+    position:relative;
+    overflow:visible;
+    border-radius:26px;
+    padding:40px;
+    background:linear-gradient(180deg,rgba(47, 107, 185, 0.9),#f6feff);
+    box-shadow:var(--shadow-strong);
+    display:flex;
+    gap:24px;
+    align-items:center;
+  }
+
+  /* make shapes rounded / non-rectangular using pseudo elements */
+  .about::before{
+    content:"";
+    position:absolute;right:-80px;top:-40px;width:220px;height:220px;border-radius:50%;
+    background:linear-gradient(180deg,var(--accent-1),var(--accent-2));opacity:0.08;filter:blur(18px);
+    transform:rotate(15deg);
+    z-index:0;
+  }
+  .about::after{
+    content:"";
+    position:absolute;left:-60px;bottom:-50px;width:180px;height:180px;border-radius:40% 60% 60% 40%;
+    background:linear-gradient(180deg,#83b2d8,#76aeeb);opacity:0.06;filter:blur(10px);
+    z-index:0;
+  }
+
+  .about-left{position:relative;z-index:2;flex:1}
+  .about-right{position:relative;z-index:2;width:320px;display:flex;flex-direction:column;gap:12px;align-items:center}
+
+  /* bubble canvas only inside about */
+  #bubbleCanvas { position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0.95; }
+
+  .about-card{
+    padding:18px;border-radius:14px;background:linear-gradient(180deg,#fff,#f8ffff);width:100%;
+    box-shadow:0 8px 26px rgba(34,60,80,0.06);
+  }
+
+  /* ================== EXPERIENCE & SKILLS ================== */
+  .exp-skill{
+    margin:28px 20px;display:grid;grid-template-columns:1fr 360px;gap:26px;
+  }
+  .rounded-list{
+    padding:18px;border-radius:16px;background:rgba(130, 162, 204, 0.9);box-shadow:var(--shadow-soft);
+  }
+
+  .skill-badge{display:inline-block;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,#4f70b6,#e6f7ff);color:var(--muted);margin:6px 6px 6px 0;font-weight:700;border:1px solid rgba(102,166,255,0.08)}
+
+  /* bars */
+  .bar{height:12px;border-radius:999px;background:#eef8ff;overflow:hidden;margin-top:8px}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));box-shadow:0 8px 18px rgba(102,166,255,0.12)}
+
+  /* ================== PROJECTS (cards curved) ================== */
+  .project-card img{
+  width:100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+
+.projects{margin:28px 20px}
+  .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .project-card{
+    padding:14px;border-radius:18px;background:linear-gradient(rgba(47, 107, 185, 0.9),#f8fdff);box-shadow:var(--shadow-soft);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .project-card:hover{transform:translateY(-10px);box-shadow:var(--shadow-strong)}
+  .project-media{height:160px;border-radius:12px;overflow:hidden;margin-bottom:12px;background:#eef9ff}
+
+  /* ================== FOLLOW (Ikuti Kami) ================== */
+  .follow{
+    margin:28px 20px;padding:18px;border-radius:18px;background:linear-gradient(180deg,rgba(47, 107, 185, 0.9),#f7fdff);box-shadow:var(--shadow-soft);display:flex;gap:12px;align-items:center;justify-content:space-between;
+  }
+  .socials{display:flex;gap:12px}
+  .social-btn{
+    display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:linear-gradient(90deg,#eef8ff,#f0fbff);border:1px solid rgba(102,166,255,0.06);font-weight:800;color:var(--muted);text-decoration:none;
+  }
+  .social-icon{width:18px;height:18px;display:inline-block}
+
+  /* ================== CONTACT & FOOTER ================== */
+  .contact{
+    margin:28px 20px;padding:20px;border-radius:18px;background:linear-gradient(180deg,rgba(138, 175, 229, 0.9),#f8fdff);box-shadow:var(--shadow-soft)
+  }
+
+  footer{margin:28px 20px;padding:18px;border-radius:12px;background:linear-gradient(180deg,#ffffff,#fbfdff);text-align:center;color:var(--muted);box-shadow:var(--shadow-soft)}
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width:1100px){
+    .hero{grid-template-columns:1fr}
+    .exp-skill{grid-template-columns:1fr}
+    .projects-grid{grid-template-columns:repeat(2,1fr)}
+    .about{flex-direction:column;align-items:stretch}
+    .about-right{width:100%}
+  }
+  @media (max-width:700px){
+    nav.links{display:none}
+    header.navbar{padding:10px;margin:8px}
+    .projects-grid{grid-template-columns:1fr}
+  }
+
+  /* small entrance anim */
+  [data-anim]{opacity:0;transform:translateY(8px);transition:all .6s var(--ease)}
+  [data-anim].in{opacity:1;transform:translateY(0)}
+</style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- NAV -->
+    <header class="navbar" role="banner">
+      <div class="brand">farhannd</div>
+      <nav class="links" role="navigation" aria-label="Main">
+        <a href="#cover" class="active">Beranda</a>
+        <a href="#about">Tentang</a>
+        <a href="#experience">Pengalaman</a>
+        <a href="#projects">Proyek</a>
+        <a href="#follow">Ikuti Kami</a>
+        <a href="#contact">Kontak</a>
+      </nav>
+      <a class="cta" href="#contact">Hubungi</a>
+    </header>
+
+    <!-- HERO / COVER -->
+    <section id="cover" class="hero" data-anim>
+      <div>
+        <div class="pro-title" style="color:var(--accent-2);font-weight:800;margin-bottom:6px">myPortofolio</div>
+        <h1>farhan dhiya'ulhaq <span style="color:var(--accent-1)">— Web & UI Developer</span></h1>
+        <p class="subtitle">Membuat antarmuka cepat, bersih, dan dapat diskalakan. Fokus pada pengalaman pengguna dan performa.</p>
+
+        <div class="hero-actions">
+          <a class="cta" href="#projects">Lihat Proyek</a>
+          <a class="social-btn" href="#about" style="background:transparent;border:none;color:var(--accent-2);font-weight:800">Tentang Saya</a>
+        </div>
+      </div>
+
+      <aside class="card-profile" aria-hidden="true">
+        <div class="profile-photo">
+          <!-- gunakan file yang sudah kamu upload (path lokal) -->
+          <img src="photo.jpeg" alt="Foto Profil">
+        </div>
+        <div style="text-align:center">
+          <div style="font-weight:800">farhann</div>
+          <div class="small" style="color:var(--muted)">Web & UI Developer</div>
+          <div style="margin-top:8px"><span class="skill-badge">Frontend</span> <span class="skill-badge">UI/UX</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ABOUT (bubble canvas only here) -->
+    <section id="about" class="about" data-anim>
+      <!-- bubble canvas (only inside this section) -->
+      <canvas id="bubbleCanvas"></canvas>
+
+      <div class="about-left">
+        <div class="about-card">
+          <h2>Ringkasan Diri</h2>
+          <p style="color:var(--muted)">
+            halloo saya farhann, seorang web developer yang menyukai desain antarmuka dan pengalaman pengguna. Berpengalaman dengan HTML, CSS, JavaScript, serta integrasi backend sederhana. Saya mengutamakan kode yang bersih, performa, dan aksesibilitas.
+          </p>
+
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+            <div style="min-width:140px">
+              <div style="font-weight:800">Ketersediaan</div>
+              <div class="small" style="color:var(--muted)">Kontrak</div>
+            </div>
+
+            <div style="min-width:140px">
+              <div style="font-weight:800"></div>
+              <div class="small" style="color:var(--muted)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+        
+      <div class="about-right">
+        <div style="width:100%" class="about-card">
+          <div style="font-weight:800">Keahlian</div>
+          <div style="margin-top:10px">
+            <div class="skill-badge">HTML</div>
+            <div class="skill-badge">CSS</div>
+            <div class="skill-badge">JavaScript</div>
+            <div class="skill-badge">PHP</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div style="font-weight:800">Tujuan Karier</div>
+            <div class="small" style="color:var(--muted)">Berkontribusi membangun produk digital yang mudah digunakan & berdampak.</div>
+          </div>
+        </div>
+
+        <a class="social-btn" href="mailto:farhan@example.com" style="width:100%;justify-content:center;margin-top:6px">Email: nhnahraf@.com</a>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE & SKILLS -->
+    <section id="experience" class="exp-skill" data-anim>
+      <div>
+        <h3 class="section-title">Pengalaman</h3>
+        <div class="rounded-list">
+          <div style="margin-bottom:12px">
+            <strong>Frontend Intern — PT Contoh</strong>
+            <div class="small" style="color:var(--muted)">Jan 2023 — Jun 2023 (Remote)</div>
+            <p class="small" style="color:var(--muted);margin-top:8px">Mengoptimasi landing page sehingga load time turun 30% dan memperbaiki pengalaman pengguna pada mobile.</p>
+          </div>
+
+          <div>
+            <strong>Freelance Web Developer</strong>
+            <div class="small" style="color:var(--muted)">Jul 2023 — Sekarang</div>
+            <p class="small" style="color:var(--muted);margin-top:8px">Membangun website portofolio & landing page untuk klien lokal dan internasional.</p>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <h3 class="section-title">Keterampilan</h3>
+        <div class="rounded-list">
+          <div style="margin-bottom:8px"><strong>HTML & CSS</strong>
+            <div class="bar"><i style="width:95%"></i></div>
+          </div>
+
+          <div style="margin-bottom:8px"><strong>JavaScript</strong>
+            <div class="bar"><i style="width:82%"></i></div>
+          </div>
+
+          <div style="margin-bottom:8px"><strong>PHP & MySQL</strong>
+            <div class="bar"><i style="width:70%"></i></div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="small" style="color:var(--muted)">Tooling & Design</div>
+            <div style="margin-top:6px">
+              <span class="skill-badge">Figma</span>
+              <span class="skill-badge">Git</span>
+              <span class="skill-badge">Bootstrap</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="projects" data-anim>
+      <h3 class="section-title" style="margin-left:20px">Contoh Karya</h3>
+      <div class="projects-grid" style="margin:2px 5px 3px 5px">
+        <article class="project-card">
+          <div class="project-media"><img src="p1.jpeg" alt=""></div>
+          <div><strong>Project Pengukur Jarak</strong></div>
+          <div class="small" style="color:var(--muted)">semester1 kelas x</div>
+          <p class="small" style="color:var(--muted)">Prototipe sensor jarak akurat ±2cm; UI sederhana untuk tampilan data.</p>
+        </article>
+
+        <article class="project-card">
+          <div class="project-media"><img src="p2.jpeg" alt=""></div>
+          <div><strong>Robot Avoiders</strong></div>
+          <div class="small" style="color:var(--muted)">semester2 kelas x</div>
+          <p class="small" style="color:var(--muted)">Robot menghindari rintangan dengan latensi rendah dan path smoothing.</p>
+        </article>
+
+        <article class="project-card">
+          <div class="project-media"><img src="p3.jpeg" alt=""></div>
+          <div><strong>Smart Home</strong></div>
+          <div class="small" style="color:var(--muted)">kelas xi</div>
+          <p class="small" style="color:var(--muted)">Dashboard kontrol IoT via web & mobile demo.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FOLLOW / IKUTI KAMI -->
+    <section id="follow" class="follow" data-anim>
+      <div>
+        <strong>Ikuti Kami</strong>
+        <div class="small" style="color:var(--muted)">Temukan lebih banyak project & update</div>
+      </div>
+
+      <div class="socials">
+        <!-- GitHub -->
+        <a class="social-btn" href="https://github.com/farhannd" target="_blank" rel="noreferrer">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.41 7.86 10.94.57.1.78-.25.78-.56 0-.28-.01-1.02-.01-2-3.2.69-3.88-1.54-3.88-1.54-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.72-1.54-2.56-.29-5.26-1.28-5.26-5.71 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.02 11.02 0 0 1 2.9-.39c.99.01 1.99.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.81 1.19 1.84 1.19 3.1 0 4.44-2.71 5.41-5.29 5.7.41.36.78 1.08.78 2.18 0 1.58-.01 2.86-.01 3.25 0 .31.2.67.79.56A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
+          </svg>
+          GitHub
+        </a>
+
+       <!-- TikTok -->
+<a class="social-btn" href="https://www.tiktok.com/@prhannd" target="_blank" rel="noreferrer">
+  <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M16.75 2h2.25c-.02 1.27.5 2.49 1.43 3.39a6.6 6.6 0 0 0 1.82 1.19v2.3a8.8 8.8 0 0 1-3.25-1.12v7.48a6.5 6.5 0 1 1-6.5-6.5c.34 0 .67.03 1 .09V12a3.9 3.9 0 1 0 2.75 3.73L16.75 2z"/>
+  </svg>
+  TikTok
+</a>
+
+      
+        <!-- LinkedIn -->
+        <a class="social-btn" href="https://linkedin.com/" target="_blank" rel="noreferrer">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v14H0zM8 8h4.8v1.92h.07c.67-1.27 2.3-2.6 4.73-2.6C22.55 7.32 24 9.6 24 13.6V22h-5v-7.16c0-1.71-.03-3.9-2.37-3.9-2.37 0-2.73 1.85-2.73 3.78V22H8V8z"/>
+          </svg>
+          LinkedIn
+        </a>
+      </div>
+    </section>  
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact" data-anim>
+      <h3 class="section-title">Kontak</h3>
+
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <form onsubmit="return contactSend(event)" style="flex:1;min-width:260px">
+          <input type="text" name="name" required placeholder="Nama lengkap" style="padding:12px;border-radius:10px;border:1px solid #e6f3ff;margin-bottom:10px;width:100%">
+          <input type="email" name="email" required placeholder="Email" style="padding:12px;border-radius:10px;border:1px solid #e6f3ff;margin-bottom:10px;width:100%">
+          <textarea name="message" required placeholder="Tulis pesan..." style="padding:12px;border-radius:10px;border:1px solid #e6f3ff;width:100%;min-height:120px"></textarea>
+          <div style="margin-top:10px">
+            <button type="submit" class="cta">Kirim Pesan</button>
+          </div>
+</form>
+
+<div style="flex:1;min-width:260px">
+  <div class="rounded-list" style="padding:18px">
+    <strong>Info Kontak</strong>
+    <p class="small" style="color:var(--muted);margin-top:8px">
+      Email: nhnahraf@.com<br>
+      Lokasi: Indonesia<br>
+      Terbuka untuk proyek & kolaborasi.
+    </p>
+  </div>
+
+ <!-- GOOGLE MAPS -->
+<div style="margin-top:20px; border-radius:14px; overflow:hidden;">
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d246.81192762796184!2d113.11203552204825!3d-8.203673865468298!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd65dab51496717%3A0x31d756cd65c75b98!2sLumajang%2C%20Kec.%20Lumajang%2C%20Kabupaten%20Lumajang%2C%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1764219202163!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+
+    <!-- FOOTER --> 
+  <footer data-anim>© <span id="yr"></span> farhan dhiya'ulhaq</footer> </div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script>
+    // simple reveal
+    const animEls = document.querySelectorAll('[data-anim]');
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('in') }
+      });
+    }, {threshold:0.12});
+    animEls.forEach(el=>observer.observe(el));
+
+    // contact demo
+    function contactSend(e){
+      e.preventDefault();
+      const f = e.target;
+      alert('Terima kasih ' + (f.name.value || '') + '! Pesan dikirim (demo).');
+      f.reset();
+      return false;
+    }
+
+    // year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    /* ========== BUBBLE CANVAS (only for #about) ========== */
+    (function(){
+      const section = document.getElementById('about');
+      const canvas = document.getElementById('bubbleCanvas');
+      const ctx = canvas.getContext('2d');
+
+      function resize(){
+        canvas.width = section.clientWidth;
+        canvas.height = section.clientHeight;
+        canvas.style.left = section.offsetLeft + 'px';
+        canvas.style.top = section.offsetTop + 'px';
+      }
+      // position full inside section
+      function setCanvasPos(){
+        const rect = section.getBoundingClientRect();
+        canvas.style.left = rect.left + 'px';
+        canvas.style.top = rect.top + window.scrollY + 'px';
+      }
+
+      window.addEventListener('resize', resize);
+      // initial
+      resize();
+
+      // create bubbles
+      let bubbles = [];
+      function createBubble(i){
+        const w = canvas.width, h = canvas.height;
+        return {
+          x: Math.random()*w,
+          y: h + Math.random()*100 + (i*15),
+          r: Math.random()*28 + 8,
+          speed: Math.random()*0.4 + 0.3,
+          drift: (Math.random()-0.5) * 0.4,
+          hue: Math.random()*360,
+          alpha: Math.random()*0.45 + 0.25
+        };
+      }
+
+      const total = Math.max(12, Math.floor((canvas.width*canvas.height)/90000));
+      for(let i=0;i<total;i++) bubbles.push(createBubble(i));
+
+      function draw(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        bubbles.forEach((b, idx)=>{
+          // radial gradient for 3D feel
+          const g = ctx.createRadialGradient(b.x - b.r*0.3, b.y - b.r*0.3, b.r*0.1, b.x, b.y, b.r);
+          // soft pastel cyan/purple/pink palette
+          const c1 = `hsla(${200 + (idx%60)},100%,85%,${b.alpha})`;
+          const c2 = `hsla(${260 + (idx%80)},80%,75%,${b.alpha*0.6})`;
+          const c3 = `rgba(255,255,255,${b.alpha*0.9})`;
+          g.addColorStop(0,c3);
+          g.addColorStop(0.4,c1);
+          g.addColorStop(1,c2);
+
+          ctx.beginPath();
+          ctx.fillStyle = g;
+          ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+          ctx.fill();
+          ctx.closePath();
+
+          // move
+          b.y -= b.speed;
+          b.x += b.drift;
+          b.r += Math.sin((Date.now()/10000) + idx) * 0.02;
+
+          // reset
+          if(b.y < -60){
+            bubbles[idx] = createBubble(idx);
+            bubbles[idx].y = canvas.height + 40;
+          }
+        });
+
+        requestAnimationFrame(draw);
+      }
+
+      // reposition canvas each frame relative to page scroll (so it sits over the about section)
+      function updateCanvasPos(){
+        const rect = section.getBoundingClientRect();
+        canvas.style.left = rect.left + 'px';
+        canvas.style.top = rect.top + window.scrollY + 'px';
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      }
+
+      // run after load and on resize + scroll (debounced)
+      function run(){
+        updateCanvasPos();
+        draw();
+      }
+
+      window.addEventListener('load', run);
+      window.addEventListener('resize', run);
+      window.addEventListener('scroll', () => {
+        // update canvas pos occasionally for performance
+        updateCanvasPos();
+      });
+    })();
+  </script>
+</body>
+</html>
